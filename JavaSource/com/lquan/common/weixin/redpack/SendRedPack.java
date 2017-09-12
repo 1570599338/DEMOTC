@@ -1,20 +1,5 @@
 package com.lquan.common.weixin.redpack;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLContext;
-
-import org.apache.http.ssl.SSLContexts;
-
-import com.lquan.common.weixin.util.WXTool;
 
 /**
  * 
@@ -24,12 +9,12 @@ import com.lquan.common.weixin.util.WXTool;
  */
 public class SendRedPack {
 
-    private String nonce_str; //随机字符串不超过32位
+    private String nonce_str; 	// 随机字符串不超过32位
     private String sign;		// 签名
     private String mch_billno;	// 商户订单号
     private String mch_id;		// 微信支付分配的商户号
     private String wxappid;		// 公众账号appid
-    private String send_name;	  // 商户名称 
+    private String send_name;	// 商户名称 
     private String re_openid;     // 接受红包的用户 用户在wxappid下的openid
     private Integer total_amount;   // 付款金额，单位分
     private Integer total_num;		// 红包发放总人数  

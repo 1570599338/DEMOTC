@@ -25,6 +25,7 @@
 				<value>WEB-INF/props/mail.properties</value>
 				<value>WEB-INF/props/misc.properties</value>
 				<value>WEB-INF/props/ad.properties</value>
+				<value>WEB-INF/props/wx.properties</value>
 			</list>
 		</property>
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
@@ -85,6 +86,24 @@
 	</bean>
 
 <!-- Mail Sender end -->
+
+<!-- 微信红包配置 Sender start -->
+	<bean id="sendRedPack" class="com.lquan.common.weixin.redpack.SendRedPack" >
+		<property name="wxappid" value="${weixin.AppID}" />
+		<property name="mch_id" value="${weixin.mch_id}" />
+		<property name="send_name" value="${weixin.send_name}" />
+		<property name="act_name" value="${weixin.act_name}" />
+		<property name="path" value="${weixin.path}" />
+		<property name="certPassword" value="${weixin.certPassword}" />
+		<property name="key" value="${weixin.API_KEY}" />
+	</bean>
+	<!-- 微信红包服务 -->
+	<bean id="sendRedPackService" class="com.lquan.common.weixin.redpack.service.SendRedPackService">
+		<property name="sendRedPack" ref="sendRedPack" />
+	</bean>
+	
+<!-- 微信红包配置 Sender End -->
+
 
 
 	

@@ -19,7 +19,9 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 /**
- * Created by 桑博 on 2016/9/6.
+ * 2017年9月12日18:04:22
+ * @author liuquan
+ *
  */
 public class WXTool {
 

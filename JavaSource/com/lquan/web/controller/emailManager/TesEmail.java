@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lquan.common.mail.EmailSender;
+import com.lquan.common.weixin.redpack.service.SendRedPackService;
 
 @Controller
 @RequestMapping(value="senderMail")
@@ -14,6 +15,9 @@ public class TesEmail {
 	
 	@Resource(name = "emailSender")
 	public EmailSender emailSender;
+	
+	@Resource(name = "sendRedPackService")
+	public SendRedPackService sendRedPackService;
 	
 	@RequestMapping(value="/test")
 	public void toTestMail(HttpServletRequest request){
@@ -24,4 +28,10 @@ public class TesEmail {
 		
 	}
 
+	
+	@RequestMapping(value="/hb")
+	public void toTestMailx(HttpServletRequest request){
+		sendRedPackService.sendHongBao(null, 0, 0, null, null, null, null, null);
+		
+	}
 }

@@ -16,8 +16,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.ssl.SSLContexts;
-import org.json.JSONException;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -29,20 +27,30 @@ import com.lquan.common.weixin.redpack.SendRedPack;
 import com.lquan.common.weixin.util.WXTool;
 
 public class SendRedPackService {
-	
+	// 微信配置信息
 	private SendRedPack sendRedPack;
-	public void sendHongBao(String nonce_str,String mch_billno,String re_openid,int total_amount,int num,String wishing,String client_ip,
+	
+	public void sendHongBao(String re_openid,int total_amount,int num,String wishing,String client_ip,
 			String act_name,String remark,String scene_id){
+		String nonce_str = WXTool.returnUUID();
 		sendRedPack.setNonce_str(nonce_str);// 随机数
+		String mch_billno = WXTool.getOrderNum();// 商品订单
 		sendRedPack.setMch_billno(mch_billno); //商品id
+		re_openid = "oCYA6v3eB-Hovk7PXAuMFkRSeEOw";
 		sendRedPack.setRe_openid(re_openid);// 用户的openid
+		total_amount =100;
 		sendRedPack.setTotal_amount(total_amount);// 红包礼金 单位分
+		num=1;
 		sendRedPack.setTotal_num(num);	// 发送的个数
+		wishing ="祝福语";
 		sendRedPack.setWishing(wishing); // 祝福语
+		client_ip = "10.171.36.49";
 		sendRedPack.setClient_ip(client_ip); // 调用接口的IP
+		act_name = "活动名称";
 		sendRedPack.setAct_name(act_name);  // 活动名称
+		remark=" 备注信息";
 		sendRedPack.setRemark(remark);  // 备注信息
-		sendRedPack.setScene_id(scene_id); // 红包发放类型
+		sendRedPack.setScene_id(null); // 红包发放类型
 		
 		String urlParamsByMap = sendRedPack.urlWXParams(nonce_str, mch_billno, re_openid, total_amount, num, wishing, client_ip, act_name, remark, scene_id);
   	   	String sign = WXTool.parseStrToMd5L32(urlParamsByMap).toUpperCase();
