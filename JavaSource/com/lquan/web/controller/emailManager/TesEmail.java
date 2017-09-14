@@ -34,4 +34,22 @@ public class TesEmail {
 		sendRedPackService.sendHongBao(null, 0, 0, null, null, null, null, null);
 		
 	}
+	
+	@RequestMapping(value="/wx")
+	public void toTestMailWX(HttpServletRequest request){
+		 // 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。   
+        String signature =request.getParameter("signature");   
+        System.out.println("******"+signature);
+        // 时间戳   
+        String timestamp =request.getParameter("timestamp");
+        System.out.println("******"+timestamp);
+        // 随机数   
+        String nonce =request.getParameter("nonce");
+        System.out.println("******"+nonce);
+        // 随机字符串   
+        String echostr =request.getParameter("echostr");
+        System.out.println("******"+echostr);
+        
+		
+	}
 }

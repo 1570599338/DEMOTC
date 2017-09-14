@@ -49,6 +49,7 @@ public class SendRedPack {
      */
     public String urlWXParams(String nonce_str,String mch_billno,String re_openid,int total_amount,int num,String wishing,String client_ip,String act_name,String remark,String scene_id){
     	StringBuffer url = new StringBuffer();
+    	
     	// 微信公众账户ID
     	if(wxappid!=null && !"".equals(wxappid.trim())){
     		url.append("wxappid=").append(getWxappid());
