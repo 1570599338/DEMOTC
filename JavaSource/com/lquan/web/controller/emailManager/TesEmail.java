@@ -42,7 +42,7 @@ public class TesEmail {
 	
 	@RequestMapping(value="/wx")
 	public void toTestMailWX(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		 // 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。   
+		// 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。   
         String signature =request.getParameter("signature");   
         System.out.println("***signature***"+signature);
         // 时间戳   
@@ -58,17 +58,17 @@ public class TesEmail {
 		
     	
     	//	1474112581 -- 2072156169 -- d2b3014d1e17ec22d81b370613896872201e0c1a  --  8906074054333431013
-    		/*timestamp = "1474112581";
-    		nonce = "2072156169";
-    		signature = "d2b3014d1e17ec22d81b370613896872201e0c1a";
-    		echostr = "8906074054333431013";*/
+		/*timestamp = "1474112581";
+		nonce = "2072156169";
+		signature = "d2b3014d1e17ec22d81b370613896872201e0c1a";
+		echostr = "8906074054333431013";*/
     		
-    		System.out.println(timestamp+" -- " + nonce + " -- " + signature + "  --  " + echostr);
-    		boolean b = ValidationUtil.checkSignature(signature, timestamp, nonce);
-    		if(b){
-    			PrintWriter out = response.getWriter();
-    			out.print(echostr);
-    		}
+		System.out.println(timestamp+" -- " + nonce + " -- " + signature + "  --  " + echostr);
+		boolean b = ValidationUtil.checkSignature(signature, timestamp, nonce);
+		if(b){
+			PrintWriter out = response.getWriter();
+			out.print(echostr);
+		}
         
         
 	}
