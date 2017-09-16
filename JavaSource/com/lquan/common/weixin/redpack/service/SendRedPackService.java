@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.platform.Platform;
 
-import com.lquan.common.weixin.redpack.SendRedPack;
+import com.lquan.common.weixin.bean.SendRedPack;
 import com.lquan.common.weixin.util.WXTool;
 
 public class SendRedPackService {

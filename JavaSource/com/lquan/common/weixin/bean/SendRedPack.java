@@ -1,4 +1,4 @@
-package com.lquan.common.weixin.redpack;
+package com.lquan.common.weixin.bean;
 
 
 /**

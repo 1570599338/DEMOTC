@@ -2,21 +2,33 @@ package com.lquan.web.controller.emailManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import snt.common.web.util.WebUtils;
+
 import com.lquan.common.mail.EmailSender;
+import com.lquan.common.weixin.bean.AccessToken;
 import com.lquan.common.weixin.redpack.service.SendRedPackService;
 import com.lquan.common.weixin.util.ValidationUtil;
+import com.lquan.common.weixin.util.WXTool;
 
 @Controller
 @RequestMapping(value="senderMail")
 public class TesEmail {
+	private static Logger log = LoggerFactory.getLogger(TesEmail.class);
 	
 	@Resource(name = "emailSender")
 	public EmailSender emailSender;
@@ -72,4 +84,52 @@ public class TesEmail {
         
         
 	}
+	
+	/***
+	 * 测试获取acess_token的数据
+	 * 
+	 * @param request
+	 * @throws ConnectException
+	 */
+	@RequestMapping(value="/token")
+	public void toTestAcess_token(HttpServletRequest request) throws ConnectException{
+		final String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+		
+	
+			AccessToken accessToken = null;
+			// 开发者ID
+			String appid = WebUtils.getModuleProperty("myweixin.AppID");
+			// 开发者密码
+			String appsecret = WebUtils.getModuleProperty("myweixin.AppSecret");
+
+			String requestUrl = access_token_url.replace("APPID", appid).replace("APPSECRET", appsecret);
+			JSONObject jsonObject = null;
+			try {
+				jsonObject = WXTool.httpRequest(requestUrl, "GET", null);
+			}  catch (ConnectException ce) {
+	            log.error("连接超时：{}", ce);
+	        } catch (Exception e1) {
+	            log.error("https请求异常：{}", e1);
+	        }
+			// 如果请求成功
+			if (null != jsonObject) {
+				try {
+					accessToken = new AccessToken();
+					accessToken.setToken(jsonObject.getString("access_token"));
+					System.out.println("access_token:"+jsonObject.getString("access_token"));
+					accessToken.setExpiresIn(jsonObject.getInt("expires_in"));
+					System.out.println("expires_in:"+jsonObject.getString("expires_in"));
+				} catch (JSONException e) {
+					accessToken = null;
+					// 获取token失败
+					log.error("获取token失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
+				}
+			}
+		
+		
+		
+	}
+	
+	
+	
 }

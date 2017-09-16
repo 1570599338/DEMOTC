@@ -88,7 +88,7 @@
 <!-- Mail Sender end -->
 
 <!-- 微信红包配置 Sender start -->
-	<bean id="sendRedPack" class="com.lquan.common.weixin.redpack.SendRedPack" >
+	<bean id="sendRedPack" class="com.lquan.common.weixin.bean.SendRedPack" >
 		<property name="wxappid" value="${weixin.AppID}" />
 		<property name="mch_id" value="${weixin.mch_id}" />
 		<property name="send_name" value="${weixin.send_name}" />
