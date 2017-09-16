@@ -3,6 +3,7 @@ package com.lquan.web.controller.emailManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +23,11 @@ import snt.common.web.util.WebUtils;
 
 import com.lquan.common.mail.EmailSender;
 import com.lquan.common.weixin.bean.AccessToken;
+import com.lquan.common.weixin.bean.TextMessage;
 import com.lquan.common.weixin.redpack.service.SendRedPackService;
+import com.lquan.common.weixin.util.MessageUtil;
 import com.lquan.common.weixin.util.ValidationUtil;
+import com.lquan.common.weixin.util.WXFunctionUtil;
 import com.lquan.common.weixin.util.WXTool;
 
 @Controller
@@ -93,19 +98,19 @@ public class TesEmail {
 	 */
 	@RequestMapping(value="/token")
 	public void toTestAcess_token(HttpServletRequest request) throws ConnectException{
-		final String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+		 String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 		
 	
 			AccessToken accessToken = null;
 			// 开发者ID
-			String appid = WebUtils.getModuleProperty("myweixin.AppID");
+			String appid = WebUtils.getModuleProperty("weixin.AppID");
 			// 开发者密码
-			String appsecret = WebUtils.getModuleProperty("myweixin.AppSecret");
+			String appsecret = WebUtils.getModuleProperty("weixin.appsecrect");
 
 			String requestUrl = access_token_url.replace("APPID", appid).replace("APPSECRET", appsecret);
 			JSONObject jsonObject = null;
 			try {
-				jsonObject = WXTool.httpRequest(requestUrl, "GET", null);
+				jsonObject = WXFunctionUtil.httpRequest(requestUrl, "GET", null);
 			}  catch (ConnectException ce) {
 	            log.error("连接超时：{}", ce);
 	        } catch (Exception e1) {
@@ -126,10 +131,42 @@ public class TesEmail {
 				}
 			}
 		
-		
-		
 	}
 	
-	
+	@RequestMapping(value="/testo")
+	public void testo(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		 response.setContentType("text/html;charset=UTF-8");
+		 PrintWriter pw = response.getWriter();
+		 String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
+		 System.out.println("*********wxMsgXml:"+wxMsgXml);
+		 Map<String, String> map = MessageUtil.parseXml(request);
+		 log.info(map.toString());
+	        // 发送方帐号（一个OpenID）
+	        String fromUserName = map.get("FromUserName");
+	        System.out.println("*********fromUserName:"+fromUserName);
+	        // 开发者微信号
+	        String toUserName = map.get("ToUserName");
+	        System.out.println("*********toUserName:"+toUserName);
+	        // 消息类型
+	        String msgType = map.get("MsgType");
+	        System.out.println("*********msgType:"+msgType);
+	        // 默认回复一个"success"
+	        String responseMessage = "success";
+	        // 对消息进行处理
+	        if (MessageUtil.MESSAGE_TEXT.equals(msgType)) {// 文本消息
+	            TextMessage textMessage = new TextMessage();
+	            textMessage.setMsgType(MessageUtil.MESSAGE_TEXT);
+	            textMessage.setToUserName(fromUserName);
+	            textMessage.setFromUserName(toUserName);
+	            textMessage.setCreateTime(System.currentTimeMillis());
+	            textMessage.setContent("我已经受到你发来的消息了");
+	            responseMessage = MessageUtil.textMessageToXml(textMessage);
+	        }
+	        System.out.println("responseMessage:"+responseMessage);
+	        log.info(responseMessage);
+	        PrintWriter out = response.getWriter();
+			out.print(responseMessage);
+
+	}
 	
 }
