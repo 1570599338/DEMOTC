@@ -12,11 +12,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
 
 import com.lquan.common.weixin.bean.TextMessage;
 import com.thoughtworks.xstream.XStream;
@@ -85,33 +87,37 @@ public class MessageUtil {
 	     * 
 	     * @param request
 	     * @return
+		 * @throws Exception 
 	     */
-	    public static Map<String, String> xmlToMap(HttpServletRequest request) {
+	    public static Map<String, String> xmlToMap(HttpServletRequest request) throws Exception {
 	        Map<String, String> map = new HashMap<String, String>();
 	        SAXReader reader = new SAXReader();
 	        InputStream ins = null;
-	        try {
+	       /* try {
 	            ins = request.getInputStream();
-	           
 	        } catch (IOException e1) {
 	            e1.printStackTrace();
 	        }
-	        Document doc = null;
-	        try {
-	          //  doc = reader.read(ins);
-	            
-	            StringBuffer content = new StringBuffer();
-               // BufferedReader br = new BufferedReader(new InputStreamReader(ins,"UTF-8"));
-                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("c:/aa.xml"),"UTF-8"));
-                String line = null;
-                while((line = br.readLine()) != null ){
-                 content.append(line+"\n");
-                }
-                br.close();
-                doc = DocumentHelper.parseText(content.toString());
-	        } catch (Exception  e1) {
-	            e1.printStackTrace();
+	        String inputString = "";
+	        BufferedReader br  = new BufferedReader(new InputStreamReader(ins));
+	        String line = null;
+	        while((line=br.readLine())!=null){
+	        inputString += line;
 	        }
+	        br.close();
+	        System.out.println("MONTH FEE XML MO:"+inputString);*/
+	        String inputString = "";
+	        inputString = IOUtils.toString(request.getInputStream(),"utf-8");
+	        System.out.println("MONTH FEE XML MOXXX:"+inputString);
+	        Document doc = DocumentHelper.parseText(inputString);
+	    //Element root = document.getRootElement();
+	      /*  Document doc = null;
+	        try {
+	            doc = reader.read(ins);
+	        } catch (DocumentException e1) {
+	            e1.printStackTrace();
+	        }*/
+
 	        // 获取根路径
 	        Element root = doc.getRootElement();
 	        @SuppressWarnings("unchecked")
@@ -170,12 +176,13 @@ public class MessageUtil {
 
 	     */  
 
-	    public static  Map<String, String> parseXml(HttpServletRequest request) throws Exception {  
+	    public static  Map<String, String> parseXmlx(HttpServletRequest request) throws Exception {  
 
 	        // 将解析结果存储在HashMap中  
 	        Map<String, String> map = new HashMap<String, String>();  
 	        // 从request中取得输入流  
 	        InputStream inputStream = request.getInputStream();  
+	        //InputStream inputStream = new Inp
 
 	       // 读取输入流  
 	        SAXReader reader = new SAXReader();
@@ -200,5 +207,40 @@ public class MessageUtil {
 	        inputStream = null;  
 	        return map;  
 
+	    }
+	    
+	    /** 
+	     * 解析微信发来的请求（XML） 
+	     *  
+	     * @param request 
+	     * @return 
+	     * @throws Exception 
+	     */  
+	    public static Map<String, String> parseXml(HttpServletRequest request) throws Exception {  
+	        // 将解析结果存储在HashMap中  
+	        Map<String, String> map = new HashMap<String, String>();  
+	  
+	        // 从request中取得输入流  
+	        InputStream inputStream = request.getInputStream();  
+	        System.out.println("**********"+inputStream.toString());
+	        // 读取输入流  
+	        SAXReader reader = new SAXReader();  
+	        Document document = reader.read(inputStream);  
+	        // 得到xml根元素  
+	        Element root = document.getRootElement();  
+	        // 得到根元素的所有子节点  
+	          
+	        @SuppressWarnings("unchecked")  
+	        List<Element> elementList = root.elements();  
+	  
+	        // 遍历所有子节点  
+	        for (Element e : elementList)  
+	            map.put(e.getName(), e.getText());  
+	  
+	        // 释放资源  
+	        inputStream.close();  
+	        inputStream = null;  
+	  
+	        return map;  
 	    }
 }

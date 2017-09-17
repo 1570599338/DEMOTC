@@ -1,7 +1,7 @@
 package com.lquan.web.controller.emailManager;
 
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.util.Map;
 
@@ -28,7 +28,6 @@ import com.lquan.common.weixin.redpack.service.SendRedPackService;
 import com.lquan.common.weixin.util.MessageUtil;
 import com.lquan.common.weixin.util.ValidationUtil;
 import com.lquan.common.weixin.util.WXFunctionUtil;
-import com.lquan.common.weixin.util.WXTool;
 
 @Controller
 @RequestMapping(value="senderMail")
@@ -59,34 +58,76 @@ public class TesEmail {
 	
 	@RequestMapping(value="/wx")
 	public void toTestMailWX(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		// 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。   
-        String signature =request.getParameter("signature");   
-        System.out.println("***signature***"+signature);
-        // 时间戳   
-        String timestamp =request.getParameter("timestamp");
-        System.out.println("***timestamp***"+timestamp);
-        // 随机数   
-        String nonce =request.getParameter("nonce");
-        System.out.println("**nonce****"+nonce);
-        // 随机字符串   
-        String echostr =request.getParameter("echostr");
-        System.out.println("***echostr***"+echostr);
-        
+		request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String method = request.getMethod();
+		if("get".equalsIgnoreCase(method)){
 		
-    	
-    	//	1474112581 -- 2072156169 -- d2b3014d1e17ec22d81b370613896872201e0c1a  --  8906074054333431013
-		/*timestamp = "1474112581";
-		nonce = "2072156169";
-		signature = "d2b3014d1e17ec22d81b370613896872201e0c1a";
-		echostr = "8906074054333431013";*/
-    		
-		System.out.println(timestamp+" -- " + nonce + " -- " + signature + "  --  " + echostr);
-		boolean b = ValidationUtil.checkSignature(signature, timestamp, nonce);
-		if(b){
-			PrintWriter out = response.getWriter();
-			out.print(echostr);
+			// 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。   
+	        String signature =request.getParameter("signature");   
+	        System.out.println("***signature***"+signature);
+	        // 时间戳   
+	        String timestamp =request.getParameter("timestamp");
+	        System.out.println("***timestamp***"+timestamp);
+	        // 随机数   
+	        String nonce =request.getParameter("nonce");
+	        System.out.println("**nonce****"+nonce);
+	        // 随机字符串   
+	        String echostr =request.getParameter("echostr");
+	        System.out.println("***echostr***"+echostr);
+	        
+			
+	    	
+	    	//	1474112581 -- 2072156169 -- d2b3014d1e17ec22d81b370613896872201e0c1a  --  8906074054333431013
+			/*timestamp = "1474112581";
+			nonce = "2072156169";
+			signature = "d2b3014d1e17ec22d81b370613896872201e0c1a";
+			echostr = "8906074054333431013";*/
+	    		
+			System.out.println(timestamp+" -- " + nonce + " -- " + signature + "  --  " + echostr);
+			boolean b = ValidationUtil.checkSignature(signature, timestamp, nonce);
+			if(b){
+				PrintWriter out = response.getWriter();
+				out.print(echostr);
+			}
+		}else {
+			 try {
+				 System.out.println("****消息start*****:"+method);
+				 PrintWriter pw = response.getWriter();
+				/* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
+				 System.out.println("*********wxMsgXml:"+wxMsgXml);*/
+				 Map<String, String> map = MessageUtil.parseXml(request);
+				 log.info(map.toString());
+			        // 发送方帐号（一个OpenID）
+			        String fromUserName = map.get("FromUserName");
+			        System.out.println("*********fromUserName:"+fromUserName);
+			        // 开发者微信号
+			        String toUserName = map.get("ToUserName");
+			        System.out.println("*********toUserName:"+toUserName);
+			        // 消息类型
+			        String msgType = map.get("MsgType");
+			        System.out.println("*********msgType:"+msgType);
+			        // 默认回复一个"success"
+			        String responseMessage = "success";
+			        // 对消息进行处理
+			        if (MessageUtil.MESSAGE_TEXT.equals(msgType)) {// 文本消息
+			            TextMessage textMessage = new TextMessage();
+			            textMessage.setMsgType(MessageUtil.MESSAGE_TEXT);
+			            textMessage.setToUserName(fromUserName);
+			            textMessage.setFromUserName(toUserName);
+			            textMessage.setCreateTime(System.currentTimeMillis());
+			            textMessage.setContent("我已经受到你发来的消息了");
+			            responseMessage = MessageUtil.textMessageToXml(textMessage);
+			        }
+			        System.out.println("responseMessage:"+responseMessage);
+			        log.info(responseMessage);
+			        PrintWriter out = response.getWriter();
+					out.print(responseMessage);
+				 } catch (Exception e) {
+						e.printStackTrace();
+					}
 		}
-        
         
 	}
 	
@@ -134,11 +175,15 @@ public class TesEmail {
 	}
 	
 	@RequestMapping(value="/testo")
-	public void testo(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public void testo(HttpServletRequest request, HttpServletResponse response){
+		 try {
+			request.setCharacterEncoding("UTF-8");
+		
+	     response.setCharacterEncoding("UTF-8");
 		 response.setContentType("text/html;charset=UTF-8");
 		 PrintWriter pw = response.getWriter();
-		 String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
-		 System.out.println("*********wxMsgXml:"+wxMsgXml);
+		/* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
+		 System.out.println("*********wxMsgXml:"+wxMsgXml);*/
 		 Map<String, String> map = MessageUtil.parseXml(request);
 		 log.info(map.toString());
 	        // 发送方帐号（一个OpenID）
@@ -166,7 +211,9 @@ public class TesEmail {
 	        log.info(responseMessage);
 	        PrintWriter out = response.getWriter();
 			out.print(responseMessage);
-
+		 } catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 	
 }
