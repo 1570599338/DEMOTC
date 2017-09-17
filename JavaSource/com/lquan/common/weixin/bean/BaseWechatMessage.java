@@ -1,5 +1,7 @@
 package com.lquan.common.weixin.bean;
 
+import com.lquan.common.weixin.util.XStreamUtil;
+
 /**
  * 微信消息的基类
  * @author lquan
@@ -31,13 +33,13 @@ public class BaseWechatMessage {
 		return ToUserName;
 	}
 	public void setToUserName(String toUserName) {
-		ToUserName = toUserName;
+		ToUserName = XStreamUtil.PREFIX_CDATA + toUserName+XStreamUtil.SUFFIX_CDATA;
 	}
 	public String getFromUserName() {
 		return FromUserName;
 	}
 	public void setFromUserName(String fromUserName) {
-		FromUserName = fromUserName;
+		FromUserName = XStreamUtil.PREFIX_CDATA + fromUserName+XStreamUtil.SUFFIX_CDATA;
 	}
 	public long getCreateTime() {
 		return CreateTime;
@@ -49,7 +51,7 @@ public class BaseWechatMessage {
 		return MsgType;
 	}
 	public void setMsgType(String msgType) {
-		MsgType = msgType;
+		MsgType = XStreamUtil.PREFIX_CDATA + msgType+XStreamUtil.SUFFIX_CDATA;
 	}
 	public String getMsgId() {
 		return MsgId;

@@ -1,7 +1,6 @@
 package com.lquan.web.controller.emailManager;
 
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +26,7 @@ import com.lquan.common.weixin.redpack.service.SendRedPackService;
 import com.lquan.common.weixin.util.MessageUtil;
 import com.lquan.common.weixin.util.ValidationUtil;
 import com.lquan.common.weixin.util.WXFunctionUtil;
+import com.lquan.common.weixin.util.XStreamUtil;
 
 @Controller
 @RequestMapping(value="senderMail")
@@ -94,8 +93,7 @@ public class TesEmail {
 		}else {
 			 try {
 				 System.out.println("****消息start*****:"+method);
-				 PrintWriter pw = response.getWriter();
-				/* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
+				 /* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
 				 System.out.println("*********wxMsgXml:"+wxMsgXml);*/
 				 Map<String, String> map = MessageUtil.parseXml(request);
 				 log.info(map.toString());
@@ -118,7 +116,8 @@ public class TesEmail {
 			            textMessage.setFromUserName(toUserName);
 			            textMessage.setCreateTime(System.currentTimeMillis());
 			            textMessage.setContent("我已经受到你发来的消息了");
-			            responseMessage = MessageUtil.textMessageToXml(textMessage);
+			            //responseMessage = MessageUtil.textMessageToXml(textMessage);
+			            responseMessage = XStreamUtil.objToXmlDefindFiledCData(true, textMessage);
 			        }
 			        System.out.println("responseMessage:"+responseMessage);
 			        log.info(responseMessage);
@@ -181,8 +180,7 @@ public class TesEmail {
 		
 	     response.setCharacterEncoding("UTF-8");
 		 response.setContentType("text/html;charset=UTF-8");
-		 PrintWriter pw = response.getWriter();
-		/* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
+		 /* String wxMsgXml = IOUtils.toString(request.getInputStream(),"utf-8");
 		 System.out.println("*********wxMsgXml:"+wxMsgXml);*/
 		 Map<String, String> map = MessageUtil.parseXml(request);
 		 log.info(map.toString());

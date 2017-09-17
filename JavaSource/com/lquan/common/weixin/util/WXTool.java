@@ -1,26 +1,16 @@
 package com.lquan.common.weixin.util;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
-
-import com.lquan.common.weixin.bean.MyX509TrustManager;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.ConnectException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -28,10 +18,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
 /**
  * 2017年9月12日18:04:22

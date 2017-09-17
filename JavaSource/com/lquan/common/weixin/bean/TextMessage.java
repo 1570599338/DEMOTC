@@ -1,5 +1,7 @@
 package com.lquan.common.weixin.bean;
 
+import com.lquan.common.weixin.util.XStreamUtil;
+
 
 /**
  * 文本消息
@@ -17,7 +19,7 @@ public class TextMessage extends BaseWechatMessage {
 	}
 	
 	public void setContent(String content) {
-		Content = content;
+		Content =XStreamUtil.PREFIX_CDATA + content+XStreamUtil.SUFFIX_CDATA;
 	}
 	
 

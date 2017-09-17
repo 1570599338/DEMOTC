@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -38,7 +37,7 @@ public class LDAPDAO {
 	private String domain;
 	// 端口
 	private static String port="389"; //端口，一般默认389;
-	private static Hashtable<Object, String> env = new Hashtable();//实例化一个Env
+	private static Hashtable<Object, String> env = new Hashtable<Object, String>();//实例化一个Env
 	static {
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");//LDAP访问安全级别(none,simple,strong),一种模式，这么写就行
 		env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");// LDAP工厂类

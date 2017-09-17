@@ -1,14 +1,9 @@
 package com.lquan.web.interceptor;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import com.lquan.common.Constants.Constants;
 
 
 
